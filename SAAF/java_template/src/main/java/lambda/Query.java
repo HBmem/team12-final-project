@@ -3,23 +3,20 @@ package lambda;
 import java.sql.*;
 
 /**
- * SERVICE #3 – QUERY
- * Reads the "sales_data" table in Aurora MySQL (created by Service #2 / Load)
- * and prints analytical results that we can show to the professor.
- *
- * Works for LOCAL and LAMBDA – no extra files needed.
+ * SERVICE #3 – QUERY.
+ * Works for LOCAL and LAMBDA.
  */
 public class Query {
 
     public static void main(String[] args) {
         try {
-            // === Same environment variables used by Load.java ===
+            
             String endpoint = System.getenv("DB_ENDPOINT");
             String dbName   = System.getenv("DB_NAME");
             String user     = System.getenv("DB_USER");
             String password = System.getenv("DB_PASSWORD");
 
-            // ---- Local backup values for testing (CHANGE THESE if needed) ----
+           
             if (endpoint == null || dbName == null || user == null || password == null) {
                 endpoint = "localhost";     // <--------- update if using local DB
                 dbName   = "salesdb";
