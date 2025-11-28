@@ -10,7 +10,8 @@ public class Query {
 
     public static void main(String[] args) {
         try {
-            
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
             String endpoint = System.getenv("DB_ENDPOINT");
             String dbName   = System.getenv("DB_NAME");
             String user     = System.getenv("DB_USER");
