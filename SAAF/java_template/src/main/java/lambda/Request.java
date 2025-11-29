@@ -8,6 +8,9 @@ public class Request {
 
     String name;
 
+    String bucketname;
+    String filename;
+
     public String getName() {
         return name;
     }
@@ -26,5 +29,26 @@ public class Request {
 
     public Request() {
 
+    }
+
+    public Request(String bucketname, String filename) {
+        this.bucketname = bucketname;
+        this.filename = filename;
+    }
+
+    public String getBucketname() {
+        return bucketname;
+    }
+
+    public void setBucketname(String bucketname) {
+        this.bucketname = bucketname;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
