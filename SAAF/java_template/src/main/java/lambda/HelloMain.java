@@ -110,6 +110,12 @@ public class HelloMain implements RequestHandler<HashMap<String, Object>, HashMa
                     public void log(String string) {
                         System.out.println("LOG:" + string);
                     }
+                    
+                    // REQUIRED: AWS Lambda SDK requires this method
+                    @Override
+                    public void log(byte[] message) {
+                        System.out.println("LOG:" + new String(message));
+                    }
                 };
             }
         };
