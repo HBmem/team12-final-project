@@ -1,10 +1,15 @@
 package lambda;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public class Sale {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("M/d/yyyy");
+
     String region;
     String country;
     String itemType;
@@ -49,7 +54,7 @@ public class Sale {
             this.orderProcessingTime = Math.toIntExact(ChronoUnit.DAYS.between(orderDate, shipDate));
         }
 
-        this.grossMargin = totalProfit.divide(totalRevenue);
+        this.grossMargin = totalProfit.divide(totalRevenue, 2, RoundingMode.HALF_UP);
     }
 
     public String getRegion() {
@@ -162,6 +167,38 @@ public class Sale {
 
     public void setTotalProfit(BigDecimal totalProfit) {
         this.totalProfit = totalProfit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Sale sale = (Sale) o;
+        return orderId == sale.orderId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(orderId);
+    }
+
+    @Override
+    public String toString() {
+        return region + "," +
+                country + "," +
+                itemType + "," +
+                salesChannel + "," +
+                orderPriority + "," +
+                orderDate.format(FORMATTER) + "," +
+                orderId + "," +
+                shipDate.format(FORMATTER) + "," +
+                unitsSold + "," +
+                unitPrice + "," +
+                unitCost + "," +
+                totalRevenue + "," +
+                totalCost + "," +
+                totalProfit + "," +
+                orderProcessingTime + "," +
+                grossMargin;
     }
 
     private String formatPriority(String priority) {
