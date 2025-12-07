@@ -68,7 +68,8 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
         try {
             // Load database configuration
             loadDatabaseConfig();
-            
+
+            context.getLogger().log("Start CSV Download");
             // Download transformed CSV from S3
             inspector.addTimeStamp("s3DownloadStart");
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard().build();
@@ -76,12 +77,15 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
             InputStream objectData = s3Object.getObjectContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(objectData));
             inspector.addTimeStamp("s3DownloadEnd");
-            
+            context.getLogger().log("Finished CSV Download");
+
+            context.getLogger().log("Start Aurora MySQL connection");
             // Connect to Aurora MySQL
             inspector.addTimeStamp("dbConnectionStart");
             conn = DriverManager.getConnection(url, username, password);
             conn.setAutoCommit(false); // Use transactions for better performance
             inspector.addTimeStamp("dbConnectionEnd");
+            context.getLogger().log("Finished Aurora MySQL connection");
             
             // Create table if it doesn't exist
             createTable(conn);
