@@ -42,25 +42,39 @@ def load_db_config(logger):
         
         # Parse JDBC URL
         # jdbc:mysql://tcss462-project.cluster-cd0ksegcg0ma.us-east-2.rds.amazonaws.com:3306/TEST
+        logger(f"[DEBUG] Parsing JDBC URL: {jdbc_url}")
+        
         if jdbc_url.startswith('jdbc:mysql://'):
             jdbc_url = jdbc_url.replace('jdbc:mysql://', '')
+            logger(f"[DEBUG] After removing jdbc:mysql:// -> {jdbc_url}")
+            
             # Remove any query parameters
             if '?' in jdbc_url:
                 jdbc_url = jdbc_url.split('?')[0]
             
             # Split host:port/database
-            parts = jdbc_url.split('/')
-            host_port = parts[0]
-            database = parts[1] if len(parts) > 1 else 'TEST'
+            if '/' in jdbc_url:
+                parts = jdbc_url.split('/')
+                host_port = parts[0]
+                database = parts[1] if len(parts) > 1 else 'TEST'
+            else:
+                # No database specified in URL
+                host_port = jdbc_url
+                database = 'TEST'
+            
+            logger(f"[DEBUG] host_port: {host_port}, database: {database}")
             
             # Split host and port
             if ':' in host_port:
-                host, port = host_port.split(':')
-                port = int(port)
+                host, port_str = host_port.split(':')
+                port = int(port_str)
             else:
                 host = host_port
                 port = 3306
+            
+            logger(f"[DEBUG] Parsed -> host: {host}, port: {port}, database: {database}")
         else:
+            logger(f"[ERROR] JDBC URL doesn't start with jdbc:mysql:// -> {jdbc_url}")
             raise Exception("Invalid JDBC URL format in db.properties")
         
         db_config = {
@@ -121,6 +135,28 @@ def create_table(connection, logger):
         connection.commit()
     
     logger("[DEBUG] Table creation/verification complete")
+
+def check_and_clear_data(connection, logger):
+    """
+    Check if table has data and delete it if found.
+    Returns the number of rows that were deleted.
+    """
+    logger("[DEBUG] Checking row count in sales_data table")
+    
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT COUNT(*) as row_count FROM sales_data")
+        result = cursor.fetchone()
+        row_count = result[0] if result else 0
+        
+        logger(f"[DEBUG] Found {row_count} existing rows in table")
+        
+        if row_count > 0:
+            logger("[DEBUG] Deleting existing data from sales_data table")
+            cursor.execute("DELETE FROM sales_data")
+            connection.commit()
+            logger(f"[DEBUG] Successfully deleted {row_count} rows")
+        
+        return row_count
 
 def lambda_handler(event, context):
     """Main Lambda handler function"""
@@ -185,6 +221,14 @@ def lambda_handler(event, context):
         logger("[DEBUG] Step 4: Creating table if not exists")
         create_table(connection, logger)
         logger("[DEBUG] Step 4: COMPLETE - Table ready")
+        
+        # Step 4.5: Check if table has data and clear it
+        logger("[DEBUG] Step 4.5: Checking for existing data")
+        existing_rows = check_and_clear_data(connection, logger)
+        if existing_rows > 0:
+            logger(f"[DEBUG] Step 4.5: COMPLETE - Deleted {existing_rows} existing rows")
+        else:
+            logger("[DEBUG] Step 4.5: COMPLETE - Table was empty, no data to delete")
         
         # Step 5: Prepare INSERT statement
         logger("[DEBUG] Step 5: Preparing INSERT statement")
