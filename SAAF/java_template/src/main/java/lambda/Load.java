@@ -75,6 +75,7 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
         
         int rowsLoaded = 0;
         int duplicatesSkipped = 0;
+        int existingRowsDeleted = 0;
         Connection conn = null;
         
         try {
@@ -114,9 +115,18 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
             createTable(conn, logger);
             logger.log("[DEBUG] Step 4: COMPLETE - Table ready");
             
-            // Prepare INSERT statement with IGNORE to skip duplicates
+            // Check if table has data and clear it
+            logger.log("[DEBUG] Step 4.5: Checking for existing data");
+            existingRowsDeleted = checkAndClearData(conn, logger);
+            if (existingRowsDeleted > 0) {
+                logger.log("[DEBUG] Step 4.5: COMPLETE - Deleted " + existingRowsDeleted + " existing rows");
+            } else {
+                logger.log("[DEBUG] Step 4.5: COMPLETE - Table was empty, no data to delete");
+            }
+            
+            // Prepare INSERT statement
             logger.log("[DEBUG] Step 5: Preparing INSERT statement");
-            String insertSQL = "INSERT IGNORE INTO sales_data (region, country, item_type, sales_channel, " +
+            String insertSQL = "INSERT INTO sales_data (region, country, item_type, sales_channel, " +
                     "order_priority, order_date, order_id, ship_date, units_sold, unit_price, " +
                     "unit_cost, total_revenue, total_cost, total_profit, order_processing_time, " +
                     "gross_margin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -179,14 +189,9 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
                         logger.log("[DEBUG] Executing batch of " + batchSize + " rows");
                         int[] results = pstmt.executeBatch();
                         conn.commit();
+                        rowsLoaded += results.length;
                         
-                        for (int result : results) {
-                            if (result > 0) rowsLoaded++;
-                            else if (result == 0) duplicatesSkipped++;
-                        }
-                        
-                        logger.log("[DEBUG] Batch complete. Total loaded: " + rowsLoaded + 
-                            ", Duplicates: " + duplicatesSkipped);
+                        logger.log("[DEBUG] Batch complete. Total loaded: " + rowsLoaded);
                         batchSize = 0;
                     }
                     
@@ -200,11 +205,7 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
                 logger.log("[DEBUG] Executing final batch of " + batchSize + " rows");
                 int[] results = pstmt.executeBatch();
                 conn.commit();
-                
-                for (int result : results) {
-                    if (result > 0) rowsLoaded++;
-                    else if (result == 0) duplicatesSkipped++;
-                }
+                rowsLoaded += results.length;
                 
                 logger.log("[DEBUG] Final batch complete");
             }
@@ -219,7 +220,7 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
             
             // Create response
             String successMessage = "Successfully loaded data from " + bucketName + "/" + fileName + 
-                ". Rows loaded: " + rowsLoaded + ", Duplicates skipped: " + duplicatesSkipped + 
+                ". Rows loaded: " + rowsLoaded + ", Existing rows deleted: " + existingRowsDeleted + 
                 ", Total rows processed: " + totalRows;
             
             logger.log("[SUCCESS] " + successMessage);
@@ -229,7 +230,7 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
             
             // Add load metrics
             inspector.addAttribute("rowsLoaded", rowsLoaded);
-            inspector.addAttribute("duplicatesSkipped", duplicatesSkipped);
+            inspector.addAttribute("existingRowsDeleted", existingRowsDeleted);
             inspector.addAttribute("totalRowsProcessed", totalRows);
             inspector.addAttribute("bucketName", bucketName);
             inspector.addAttribute("fileName", fileName);
