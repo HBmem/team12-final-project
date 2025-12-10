@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import saaf.Inspector;
 import saaf.Response;
 
@@ -77,7 +79,19 @@ public class ExtractTransform implements RequestHandler<Request, HashMap<String,
         s3ClientOutput.putObject(bucketname, newFileName, is, meta);
 
         Response response = new Response();
-        response.setValue("Bucket:" + bucketname + " filename:" + newFileName + " size:" + bytes.length);
+
+        // Create JSON for passing
+        Map<String, Object> valueMap = new HashMap<>();
+        valueMap.put("bucketname", bucketname);
+        valueMap.put("filename", newFileName);
+        valueMap.put("size", bytes.length);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            response.setValue(mapper.writeValueAsString(valueMap));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         inspector.consumeResponse(response);
 
