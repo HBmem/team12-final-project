@@ -101,8 +101,8 @@ def extractTransform(request, context):
 
         msg_status = {
             "status": "success",
-            "bucket": bucketname,
-            "newFile": new_file_name,
+            "bucketname": bucketname,
+            "filename": new_file_name,
             "size": len(csv_data)
         }
         inspector.addAttribute("message", json.dumps(msg_status))
