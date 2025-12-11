@@ -31,7 +31,7 @@
             <version>3.11.3</version>
         </dependency>
 
-        <!-- AWS SDK for S3 -->
+        <!-- AWS SDK for S3 (gives you S3ObjectInputStream etc.) -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
@@ -45,22 +45,34 @@
             <version>8.0.33</version>
         </dependency>
 
-        <!-- JSON Processing (for Query function) -->
+        <!-- JSON libs -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
+
+        <!-- Jackson for ExtractTransform -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.1</version>
         </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <!-- include db.properties and any other resources -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
-            <!-- Maven Compiler Plugin -->
+            <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -71,7 +83,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven Shade Plugin - Creates fat JAR with all dependencies -->
+            <!-- Shade plugin to make a fat JAR INCLUDING aws-java-sdk-s3 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -88,24 +100,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>15</source>
-                    <target>15</target>
-                </configuration>
-            </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.jpg</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
-
 </project>
