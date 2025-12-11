@@ -14,8 +14,6 @@ import java.util.Properties;
  * AWS Lambda Query Function - Service #3
  * Runs analytical SQL queries on the sales_data table in Aurora MySQL.
  *
- * Uses the same db.properties configuration pattern as Load (Service #2).
- *
  * @author Team12
  */
 public class Query implements RequestHandler<Request, HashMap<String, Object>> {
