@@ -1,6 +1,6 @@
 {
-	"function": "helloWorld",
+	"function": "projectService1Python",
     "platform": "AWS Lambda",
-    "source": "../nodejs_template",
+    "source": "../python_template",
     "endpoint": ""
 }
