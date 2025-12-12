@@ -94,6 +94,11 @@ public class Query implements RequestHandler<Request, HashMap<String, Object>> {
             // Build simple response
             Response response = new Response();
             response.setValue("Query service completed successfully against: " + url);
+
+            response.setBucketNamePipeline(request.getBucketname());
+            response.setFileNamePipeline(request.getFilename());
+            response.setDbUrlPipeline(url);
+
             inspector.consumeResponse(response);
 
         } catch (Exception e) {

@@ -96,8 +96,6 @@ public class ExtractTransform implements RequestHandler<Request, HashMap<String,
             throw new RuntimeException(e);
         }
 
-
-
         response.setBucketNamePipeline(bucketname);
         response.setFileNamePipeline(newFileName);
         response.setDbUrlPipeline(url);
