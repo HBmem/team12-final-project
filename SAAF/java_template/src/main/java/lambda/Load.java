@@ -193,10 +193,10 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
             inspector.addAttribute("fileName", fileName);
             inspector.addAttribute("dbUrl", url);
 
-            response.setBucketNamePipeline(bucketName);
-            response.setFileNamePipeline(fileName);
-            response.setDbUrlPipeline(url);
-            response.setLoadErrorPipeline(BigDecimal.ZERO);
+            response.setBucketName(bucketName);
+            response.setFileName(fileName);
+            response.setDbUrl(url);
+            response.setLoadError(BigDecimal.ZERO);
 
             inspector.consumeResponse(response);
             

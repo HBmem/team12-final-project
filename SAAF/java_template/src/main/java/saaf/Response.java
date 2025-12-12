@@ -21,10 +21,10 @@ public class Response {
     private String value;
 
     // Pipeline fields
-    private String bucketNamePipeline;
-    private String fileNamePipeline;
-    private String dbUrlPipeline;
-    private BigDecimal loadErrorPipeline;
+    private String bucketName;
+    private String fileName;
+    private String dbUrl;
+    private BigDecimal loadError;
 
     public String getValue() {
         return value;
@@ -34,45 +34,45 @@ public class Response {
         this.value = value;
     }
 
-    public String getBucketNamePipeline() {
-        return bucketNamePipeline;
+    public String getBucketName() {
+        return bucketName;
     }
 
-    public void setBucketNamePipeline(String bucketNamePipeline) {
-        this.bucketNamePipeline = bucketNamePipeline;
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
     }
 
-    public String getFileNamePipeline() {
-        return fileNamePipeline;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setFileNamePipeline(String fileNamePipeline) {
-        this.fileNamePipeline = fileNamePipeline;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public String getDbUrlPipeline() {
-        return dbUrlPipeline;
+    public String getDbUrl() {
+        return dbUrl;
     }
 
-    public void setDbUrlPipeline(String dbUrlPipeline) {
-        this.dbUrlPipeline = dbUrlPipeline;
+    public void setDbUrl(String dbUrl) {
+        this.dbUrl = dbUrl;
     }
 
-    public BigDecimal getLoadErrorPipeline() {
-        return loadErrorPipeline;
+    public BigDecimal getLoadError() {
+        return loadError;
     }
 
-    public void setLoadErrorPipeline(BigDecimal loadErrorPipeline) {
-        this.loadErrorPipeline = loadErrorPipeline;
+    public void setLoadError(BigDecimal loadError) {
+        this.loadError = loadError;
     }
 
     @Override
     public String toString() {
         return "value=" + this.getValue() +
-                ", bucketNamePipeline=" + this.getBucketNamePipeline() +
-                ", fileNamePipeline=" + this.getFileNamePipeline() +
-                ", dbUrlPipeline=" +  this.getDbUrlPipeline() +
-                ", loadErrorPipeline=" + this.getLoadErrorPipeline() +
+                ", bucketName=" + this.getBucketName() +
+                ", fileName=" + this.getFileName() +
+                ", dbUrl=" +  this.getDbUrl() +
+                ", loadError=" + this.getLoadError() +
                 super.toString();
     }
 

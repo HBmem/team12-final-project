@@ -1,7 +1,6 @@
 package lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -36,6 +35,12 @@ public class ExtractTransform implements RequestHandler<Request, HashMap<String,
 
         String bucketname = request.getBucketname();
         String filename = request.getFilename();
+
+        try {
+            loadDatabaseConfig();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 //        logger.log("Received bucketname:" + bucketname + " Received filename:" + filename);
 
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard().build();
@@ -96,10 +101,14 @@ public class ExtractTransform implements RequestHandler<Request, HashMap<String,
             throw new RuntimeException(e);
         }
 
-        response.setBucketNamePipeline(bucketname);
-        response.setFileNamePipeline(newFileName);
-        response.setDbUrlPipeline(url);
-        response.setLoadErrorPipeline(BigDecimal.ZERO);
+        response.setBucketName(bucketname);
+//        logger.log("bnp" + bucketname);
+        response.setFileName(newFileName);
+//        logger.log("fnp" + newFileName);
+        response.setDbUrl(url);
+//        logger.log("url" + url);
+        response.setLoadError(BigDecimal.ZERO);
+//        logger.log("lep" + BigDecimal.ZERO);
 
         inspector.consumeResponse(response);
 

@@ -96,10 +96,10 @@ public class Query implements RequestHandler<Request, HashMap<String, Object>> {
             Response response = new Response();
             response.setValue("Query service completed successfully against: " + url);
 
-            response.setBucketNamePipeline(request.getBucketname());
-            response.setFileNamePipeline(request.getFilename());
-            response.setDbUrlPipeline(url);
-            response.setLoadErrorPipeline(BigDecimal.ZERO);
+            response.setBucketName(request.getBucketname());
+            response.setFileName(request.getFilename());
+            response.setDbUrl(url);
+            response.setLoadError(BigDecimal.ZERO);
 
             inspector.consumeResponse(response);
 
