@@ -3,11 +3,10 @@
     "callAsync": false,
     "memorySettings": [],
     "parentPayload": {
-      "bucketname":"test.bucket.462562.f25.hmb",
+      "bucketname":"test.bucket.462562.f25.hmb"
     },
     "payloads": [
-        {"filename":"1000 Sales Records.csv"},
-        {"filename":"100 Sales Records.csv"}
+        { "filename":"100 Sales Records.csv" }
     ],
 
     "runs": 50,
@@ -35,7 +34,7 @@
     "removeDuplicateContainers": false,
     "overlapFilter": "functionName",
 
-    "openCSV": true,
+    "openCSV": false,
     "combineSheets": false,
     "warmupBuffer": 1
 } 
