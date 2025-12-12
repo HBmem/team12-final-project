@@ -99,6 +99,7 @@ public class ExtractTransform implements RequestHandler<Request, HashMap<String,
         response.setBucketNamePipeline(bucketname);
         response.setFileNamePipeline(newFileName);
         response.setDbUrlPipeline(url);
+        response.setLoadErrorPipeline(BigDecimal.ZERO);
 
         inspector.consumeResponse(response);
 

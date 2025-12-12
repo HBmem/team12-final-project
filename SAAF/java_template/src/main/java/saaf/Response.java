@@ -1,5 +1,7 @@
 package saaf;
 
+import java.math.BigDecimal;
+
 /**
  * A basic Response object that can be consumed by FaaS Inspector
  * to be used as additional output.
@@ -22,6 +24,7 @@ public class Response {
     private String bucketNamePipeline;
     private String fileNamePipeline;
     private String dbUrlPipeline;
+    private BigDecimal loadErrorPipeline;
 
     public String getValue() {
         return value;
@@ -55,12 +58,21 @@ public class Response {
         this.dbUrlPipeline = dbUrlPipeline;
     }
 
+    public BigDecimal getLoadErrorPipeline() {
+        return loadErrorPipeline;
+    }
+
+    public void setLoadErrorPipeline(BigDecimal loadErrorPipeline) {
+        this.loadErrorPipeline = loadErrorPipeline;
+    }
+
     @Override
     public String toString() {
         return "value=" + this.getValue() +
                 ", bucketNamePipeline=" + this.getBucketNamePipeline() +
                 ", fileNamePipeline=" + this.getFileNamePipeline() +
                 ", dbUrlPipeline=" +  this.getDbUrlPipeline() +
+                ", loadErrorPipeline=" + this.getLoadErrorPipeline() +
                 super.toString();
     }
 

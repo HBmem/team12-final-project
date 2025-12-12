@@ -6,6 +6,7 @@ import saaf.Inspector;
 import saaf.Response;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Properties;
@@ -98,6 +99,7 @@ public class Query implements RequestHandler<Request, HashMap<String, Object>> {
             response.setBucketNamePipeline(request.getBucketname());
             response.setFileNamePipeline(request.getFilename());
             response.setDbUrlPipeline(url);
+            response.setLoadErrorPipeline(BigDecimal.ZERO);
 
             inspector.consumeResponse(response);
 
