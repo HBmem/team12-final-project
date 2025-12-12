@@ -23,6 +23,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ExtractTransform implements RequestHandler<Request, HashMap<String, Object>> {
+
+    private String url;
+
     @Override
     public HashMap<String, Object> handleRequest(Request request, Context context) {
         //Collect initial data.
@@ -93,6 +96,12 @@ public class ExtractTransform implements RequestHandler<Request, HashMap<String,
             throw new RuntimeException(e);
         }
 
+
+
+        response.setBucketNamePipeline(bucketname);
+        response.setFileNamePipeline(newFileName);
+        response.setDbUrlPipeline(url);
+
         inspector.consumeResponse(response);
 
         //Collect final information such as total runtime and cpu deltas.
@@ -119,5 +128,20 @@ public class ExtractTransform implements RequestHandler<Request, HashMap<String,
                 new BigDecimal(data[11]),
                 new BigDecimal(data[12]),
                 new BigDecimal(data[13]));
+    }
+
+    private void loadDatabaseConfig() throws Exception {
+        Properties prop = new Properties();
+        InputStream input = Load.class.getClassLoader().getResourceAsStream("db.properties");
+
+        if (input == null) {
+            throw new Exception("Unable to find db.properties");
+        }
+
+        prop.load(input);
+
+        url = prop.getProperty("url");
+
+        input.close();
     }
 }

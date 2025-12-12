@@ -18,6 +18,11 @@ public class Response {
     // Return value
     private String value;
 
+    // Pipeline fields
+    private String bucketNamePipeline;
+    private String fileNamePipeline;
+    private String dbUrlPipeline;
+
     public String getValue() {
         return value;
     }
@@ -26,8 +31,38 @@ public class Response {
         this.value = value;
     }
 
+    public String getBucketNamePipeline() {
+        return bucketNamePipeline;
+    }
+
+    public void setBucketNamePipeline(String bucketNamePipeline) {
+        this.bucketNamePipeline = bucketNamePipeline;
+    }
+
+    public String getFileNamePipeline() {
+        return fileNamePipeline;
+    }
+
+    public void setFileNamePipeline(String fileNamePipeline) {
+        this.fileNamePipeline = fileNamePipeline;
+    }
+
+    public String getDbUrlPipeline() {
+        return dbUrlPipeline;
+    }
+
+    public void setDbUrlPipeline(String dbUrlPipeline) {
+        this.dbUrlPipeline = dbUrlPipeline;
+    }
+
     @Override
     public String toString() {
-        return "value=" + this.getValue() + super.toString();
+        return "value=" + this.getValue() +
+                ", bucketNamePipeline=" + this.getBucketNamePipeline() +
+                ", fileNamePipeline=" + this.getFileNamePipeline() +
+                ", dbUrlPipeline=" +  this.getDbUrlPipeline() +
+                super.toString();
     }
+
+
 }

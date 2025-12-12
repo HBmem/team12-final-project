@@ -35,6 +35,6 @@
     "overlapFilter": "functionName",
 
     "openCSV": false,
-    "combineSheets": false,
+    "combineSheets": true,
     "warmupBuffer": 1
 } 
