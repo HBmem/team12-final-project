@@ -1,0 +1,6 @@
+{
+	"function": "projectService1",
+    "platform": "AWS Lambda",
+    "source": "../java_template",
+    "endpoint": ""
+}

@@ -6,7 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="tlq-pipeline" target="17" />
+        <module name="lambda_test" />
       </profile>
     </annotationProcessing>
   </component>

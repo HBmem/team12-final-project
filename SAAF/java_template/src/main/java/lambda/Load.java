@@ -12,6 +12,7 @@ import saaf.Response;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -191,7 +192,12 @@ public class Load implements RequestHandler<Request, HashMap<String, Object>> {
             inspector.addAttribute("bucketName", bucketName);
             inspector.addAttribute("fileName", fileName);
             inspector.addAttribute("dbUrl", url);
-            
+
+            response.setBucketName(bucketName);
+            response.setFileName(fileName);
+            response.setDbUrl(url);
+            response.setLoadError(BigDecimal.ZERO);
+
             inspector.consumeResponse(response);
             
         } catch (Exception e) {

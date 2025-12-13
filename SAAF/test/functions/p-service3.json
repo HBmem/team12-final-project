@@ -1,0 +1,6 @@
+{
+	"function": "projectService3Python",
+    "platform": "AWS Lambda",
+    "source": "../python_template",
+    "endpoint": ""
+}
